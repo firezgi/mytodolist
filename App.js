@@ -25,22 +25,11 @@ export default function App() {
   const onChangeText = (type) => {
     setNewTask(type);
   };
-  //if(!(/^[a-zA-Z0-9- ]*$/.test(userInput) ))
   const add = () => {
     setList([...lists, { item: newTask }]);
     setNewTask("");
   };
-  // const checkDuplicate = () => {
-  //   const cleanInput = newTask.trim().toLowerCase();
-  //   console.log(cleanInput)
-  //   if (lists.every((list) => list.item !== cleanInput)) {
-  //     return true;
-  //   }
-  //   return !(add())
-  // };
-
-  const verifyInput = () => {
-    // checkDuplicate();
+  const checkInput = () => {
     if (
       typeof newTask === "string" &&
       newTask.length > 0 &&
@@ -56,14 +45,18 @@ export default function App() {
   const handleChange = (index) => {
     setSelectedIndex(index);
     setShow(!show);
-    console.log(index);
+    
   };
   const popup = () => (
     <View style={styles.popup}>
       <Text style={styles.popupText}>Are you sure?</Text>
       <View style={styles.checkButtons}>
         <View style={styles.checkButton}>
-          <Button color="red" title=" Yes " onPress={() => dialogAction(true)} />
+          <Button
+            color="red"
+            title=" Yes "
+            onPress={() => dialogAction(true)}
+          />
         </View>
         <View style={styles.checkButton}>
           <Button title=" No " onPress={() => dialogAction(false)} />
@@ -84,7 +77,6 @@ export default function App() {
     if (action) {
       setList(lists.filter((list, i) => i !== selectedIndex));
     }
-    // setDialogResponse(action ? true : false);
     setShow(false);
     setShow2(false);
     setSelectedIndex(-1);
@@ -105,18 +97,12 @@ export default function App() {
         />
         <View style={styles.btn}>
           <Button
-            onPress={() => verifyInput()}
+            onPress={() => checkInput()}
             title="Add to do list "
             color="#841584"
           />
         </View>
-        <View style={styles.btn}>
-          {/* <Button
-            onPress={() => setNewTask("")}
-            title="clear"
-            color="#841584"
-          /> */}
-        </View>
+        <View style={styles.btn}></View>
       </View>
 
       <ScrollView>
@@ -144,8 +130,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: 'flex-end',
   },
   titleWrap: {
     backgroundColor: "blue",
@@ -179,8 +163,6 @@ const styles = StyleSheet.create({
   },
   cbTask: {
     flexDirection: "row",
-    // justifyContent:"flex-start"
-    // alignSelf:""
   },
   checkbox: {
     alignSelf: "center",
@@ -205,7 +187,7 @@ const styles = StyleSheet.create({
     width: "80%",
     marginLeft: 40,
     padding: 10,
-    borderRadius:5
+    borderRadius: 5,
   },
   popupText: {
     margin: 5,
@@ -213,13 +195,13 @@ const styles = StyleSheet.create({
     fontWeight: 100,
     fontFamily: "Serif",
   },
-  checkButtons:{
-    flexDirection:"row",
-    justifyContent:"space-between"
+  checkButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   checkButton: {
-    margin:20,
+    margin: 20,
     border: "solid 2px black",
-    borderRadius:5
+    borderRadius: 5,
   },
 });
