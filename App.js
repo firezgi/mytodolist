@@ -14,6 +14,7 @@ import {
 export default function App() {
   const [newTask, setNewTask] = useState("");
   const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(false);
   const [dialogResponse, setDialogResponse] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
@@ -27,32 +28,65 @@ export default function App() {
   //if(!(/^[a-zA-Z0-9- ]*$/.test(userInput) ))
   const add = () => {
     setList([...lists, { item: newTask }]);
-    // setNewTask("");
+    setNewTask("");
+  };
+  // const checkDuplicate = () => {
+  //   const cleanInput = newTask.trim().toLowerCase();
+  //   console.log(cleanInput)
+  //   if (lists.every((list) => list.item !== cleanInput)) {
+  //     return true;
+  //   }
+  //   return !(add())
+  // };
+
+  const verifyInput = () => {
+    // checkDuplicate();
+    if (
+      typeof newTask === "string" &&
+      newTask.length > 0 &&
+      newTask.trim() &&
+      /^[a-zA-Z0-9- ]*$/.test(newTask)
+    ) {
+      add();
+    } else {
+      setShow2(true);
+      setNewTask("");
+    }
   };
   const handleChange = (index) => {
-    // const proceed = confirm("Are u sure?");
-    // proceed &&
     setSelectedIndex(index);
     setShow(!show);
-    // console.log(index);
+    console.log(index);
   };
   const popup = () => (
     <View style={styles.popup}>
-      <Text>r u sure</Text>
-      <View>
-        <Button title="Yes" onPress={() => dialogAction(true)} />
-      </View>
-      <View>
-        <Button title="No" onPress={() => dialogAction(false)} />
+      <Text style={styles.popupText}>Are you sure?</Text>
+      <View style={styles.checkButtons}>
+        <View style={styles.checkButton}>
+          <Button color="red" title=" Yes " onPress={() => dialogAction(true)} />
+        </View>
+        <View style={styles.checkButton}>
+          <Button title=" No " onPress={() => dialogAction(false)} />
+        </View>
       </View>
     </View>
   );
+  const popup2 = () => (
+    <View style={styles.popup}>
+      <Text style={styles.popupText}>Invalid input</Text>
+      <View style={styles.checkButton}>
+        <Button title="Ok" onPress={() => dialogAction(true)} />
+      </View>
+    </View>
+  );
+
   const dialogAction = (action) => {
     if (action) {
       setList(lists.filter((list, i) => i !== selectedIndex));
     }
     // setDialogResponse(action ? true : false);
     setShow(false);
+    setShow2(false);
     setSelectedIndex(-1);
   };
 
@@ -70,11 +104,19 @@ export default function App() {
           value={newTask}
         />
         <View style={styles.btn}>
-          <Button onPress={add} title="Add to do list " color="#841584" />
-          
+          <Button
+            onPress={() => verifyInput()}
+            title="Add to do list "
+            color="#841584"
+          />
         </View>
-        <Button onPress={()=>setNewTask("")} title="clear" color="#841584" />
-
+        <View style={styles.btn}>
+          {/* <Button
+            onPress={() => setNewTask("")}
+            title="clear"
+            color="#841584"
+          /> */}
+        </View>
       </View>
 
       <ScrollView>
@@ -90,7 +132,7 @@ export default function App() {
 
         {show && popup()}
 
-        
+        {show2 && popup2()}
 
         <StatusBar style="auto" />
       </ScrollView>
@@ -152,5 +194,32 @@ const styles = StyleSheet.create({
   },
   inBtn: {
     flexDirection: "row",
+  },
+  popup: {
+    flex: 1,
+    backgroundColor: "violet",
+    alignItems: "center",
+    justifyContent: "space-around",
+    flexDirection: "column",
+    border: "solid 3px black",
+    width: "80%",
+    marginLeft: 40,
+    padding: 10,
+    borderRadius:5
+  },
+  popupText: {
+    margin: 5,
+    fontSize: "1.5em",
+    fontWeight: 100,
+    fontFamily: "Serif",
+  },
+  checkButtons:{
+    flexDirection:"row",
+    justifyContent:"space-between"
+  },
+  checkButton: {
+    margin:20,
+    border: "solid 2px black",
+    borderRadius:5
   },
 });
